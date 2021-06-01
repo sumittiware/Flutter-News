@@ -1,11 +1,10 @@
-import 'package:NewsApp/Theme/colors.dart';
-import 'package:NewsApp/Theme/customtheme.dart';
-import 'package:NewsApp/config.dart';
-import 'package:NewsApp/services/api_manager.dart';
+import 'package:news_app/Theme/colors.dart';
+import 'package:news_app/Theme/customtheme.dart';
+import 'package:news_app/config.dart';
+import 'package:news_app/services/api_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import '../Theme/textstyle.dart';
 
 class NewsDetail extends StatelessWidget {
   final int index;
@@ -17,23 +16,19 @@ class NewsDetail extends StatelessWidget {
         Provider.of<ApiManager>(context, listen: false).news[index];
     var formattedTime =
         DateFormat('dd MMM - HH:mm').format(currentNews.publishedAt);
+    final theme = Provider.of<CustomTheme>(context);
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: AppColor.primaryLight,
         title: Text(
           "News App",
-          style: TextStyle(
-              fontSize: 20,
-              color: !CustomTheme.isDarkTheme
-                  ? AppColor.bgColorDark
-                  : AppColor.bgColorLight),
+          style: TextStyle(fontSize: 20, color: AppColor.bgColorLight),
         ),
         actions: [
           IconButton(
             icon: Icon(
               Icons.share_rounded,
-              color: !CustomTheme.isDarkTheme
-                  ? AppColor.bgColorDark
-                  : AppColor.bgColorLight,
+              color: AppColor.bgColorLight,
             ),
             onPressed: () {
               share(currentNews.url);
@@ -53,7 +48,7 @@ class NewsDetail extends StatelessWidget {
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: !CustomTheme.isDarkTheme
+                    color: !theme.isDarkTheme
                         ? AppColor.bgColorDark
                         : AppColor.bgColorLight),
               ),
@@ -67,7 +62,7 @@ class NewsDetail extends StatelessWidget {
                     Text(
                       formattedTime,
                       style: TextStyle(
-                          color: !CustomTheme.isDarkTheme
+                          color: !theme.isDarkTheme
                               ? AppColor.bgColorDark
                               : AppColor.bgColorLight),
                     ),
@@ -75,7 +70,7 @@ class NewsDetail extends StatelessWidget {
                     Text(
                       currentNews.author,
                       style: TextStyle(
-                          color: !CustomTheme.isDarkTheme
+                          color: !theme.isDarkTheme
                               ? AppColor.bgColorDark
                               : AppColor.bgColorLight),
                     )
@@ -100,7 +95,7 @@ class NewsDetail extends StatelessWidget {
                 Text("Source : " + currentNews.source.name,
                     style: TextStyle(
                         fontSize: 16,
-                        color: !CustomTheme.isDarkTheme
+                        color: !theme.isDarkTheme
                             ? AppColor.bgColorDark
                             : AppColor.bgColorLight)),
               SizedBox(
@@ -111,7 +106,7 @@ class NewsDetail extends StatelessWidget {
                   currentNews.description,
                   style: TextStyle(
                       fontSize: 18,
-                      color: !CustomTheme.isDarkTheme
+                      color: !theme.isDarkTheme
                           ? AppColor.bgColorDark
                           : AppColor.bgColorLight),
                 )

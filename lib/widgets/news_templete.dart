@@ -1,9 +1,12 @@
-import 'package:NewsApp/Theme/colors.dart';
-import 'package:NewsApp/Theme/customtheme.dart';
-import 'package:NewsApp/config.dart';
-import 'package:NewsApp/screens/newsdetail.dart';
+import 'package:news_app/Theme/colors.dart';
+import 'package:news_app/Theme/customtheme.dart';
+import 'package:news_app/config.dart';
+import 'package:news_app/screens/newsdetail.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+
+import '../config.dart';
 
 class NewsTemplete extends StatefulWidget {
   final int index;
@@ -28,10 +31,11 @@ class _NewsTempleteState extends State<NewsTemplete> {
   Widget build(BuildContext context) {
     var formattedTime = DateFormat('dd MMM - HH:mm').format(widget.publishDate);
     final deviceSize = MediaQuery.of(context).size;
+    final theme = Provider.of<CustomTheme>(context);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Material(
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(8),
         elevation: 4,
         color: Theme.of(context).accentColor,
         shadowColor: Theme.of(context).primaryColor,
@@ -57,7 +61,7 @@ class _NewsTempleteState extends State<NewsTemplete> {
                     ? Card(
                         clipBehavior: Clip.antiAlias,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
+                          borderRadius: BorderRadius.circular(5),
                         ),
                         child: AspectRatio(
                             aspectRatio: 2.5,
@@ -78,7 +82,7 @@ class _NewsTempleteState extends State<NewsTemplete> {
                     style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
-                        color: !CustomTheme.isDarkTheme
+                        color: !theme.isDarkTheme
                             ? AppColor.bgColorDark
                             : AppColor.bgColorLight),
                   ),
@@ -90,29 +94,31 @@ class _NewsTempleteState extends State<NewsTemplete> {
                       Text(
                         formattedTime,
                         style: TextStyle(
-                            color: !CustomTheme.isDarkTheme
+                            color: !theme.isDarkTheme
                                 ? AppColor.bgColorDark
                                 : AppColor.bgColorLight),
                       ),
-                    if (widget.author != null)
+                    if (widget.author != null && widget.author.length < 12)
                       Text(
                         widget.author,
                         maxLines: 1,
                         style: TextStyle(
-                            color: !CustomTheme.isDarkTheme
+                            color: !theme.isDarkTheme
                                 ? AppColor.bgColorDark
                                 : AppColor.bgColorLight),
                       ),
                     FlatButton.icon(
                       icon: Icon(
                         Icons.share_rounded,
-                        color: mainColor,
+                        color: !theme.isDarkTheme
+                            ? AppColor.bgColorDark
+                            : AppColor.bgColorLight,
                         size: 15,
                       ),
                       label: Text(
                         'SHARE',
                         style: TextStyle(
-                            color: !CustomTheme.isDarkTheme
+                            color: !theme.isDarkTheme
                                 ? AppColor.bgColorDark
                                 : AppColor.bgColorLight,
                             fontSize: 12),

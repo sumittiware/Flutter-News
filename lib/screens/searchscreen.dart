@@ -1,8 +1,7 @@
-import 'package:NewsApp/Theme/colors.dart';
-import 'package:NewsApp/Theme/customtheme.dart';
-import 'package:NewsApp/config.dart';
-import 'package:NewsApp/services/api_manager.dart';
-import 'package:NewsApp/widgets/news_templete.dart';
+import 'package:news_app/Theme/colors.dart';
+import 'package:news_app/Theme/customtheme.dart';
+import 'package:news_app/services/api_manager.dart';
+import 'package:news_app/widgets/news_templete.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -23,11 +22,14 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-
+    final theme = Provider.of<CustomTheme>(context);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          iconTheme: IconThemeData(color: mainColor),
+          iconTheme: IconThemeData(
+              color: !theme.isDarkTheme
+                  ? AppColor.bgColorDark
+                  : AppColor.bgColorLight),
           backgroundColor: Colors.transparent,
           shadowColor: Colors.transparent,
           title: TextField(
@@ -35,7 +37,7 @@ class _SearchScreenState extends State<SearchScreen> {
             decoration: InputDecoration(
                 hintText: 'Search',
                 hintStyle: TextStyle(
-                    color: !CustomTheme.isDarkTheme
+                    color: !theme.isDarkTheme
                         ? AppColor.bgColorDark
                         : AppColor.bgColorLight),
                 suffixIcon: IconButton(
@@ -71,7 +73,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 child: Text(
                                   'Something went wrong!!',
                                   style: TextStyle(
-                                      color: !CustomTheme.isDarkTheme
+                                      color: !theme.isDarkTheme
                                           ? AppColor.bgColorDark
                                           : AppColor.bgColorLight),
                                 ),
@@ -80,7 +82,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 ? Center(
                                     child: Text('No result found!!',
                                         style: TextStyle(
-                                            color: !CustomTheme.isDarkTheme
+                                            color: !theme.isDarkTheme
                                                 ? AppColor.bgColorDark
                                                 : AppColor.bgColorLight)),
                                   )
@@ -100,7 +102,7 @@ class _SearchScreenState extends State<SearchScreen> {
               : Center(
                   child: Text('Search using keywords',
                       style: TextStyle(
-                          color: !CustomTheme.isDarkTheme
+                          color: !theme.isDarkTheme
                               ? AppColor.bgColorDark
                               : AppColor.bgColorLight)),
                 ),

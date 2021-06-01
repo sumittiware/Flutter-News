@@ -8,6 +8,7 @@ import '../models/newsinfo.dart';
 class ApiManager with ChangeNotifier {
   List<Article> _news = [];
   List<Article> _searchedNews = [];
+  String _currentCategory = 'general';
 
   List<Article> get news {
     return [..._news];
@@ -17,20 +18,28 @@ class ApiManager with ChangeNotifier {
     return [..._searchedNews];
   }
 
-  String currentCategory = 'general';
+  String get currentCategory {
+    return _currentCategory;
+  }
+
+  setCategory(String category) {
+    _currentCategory = category;
+    notifyListeners();
+  }
+
   List<String> category = [
-    'general',
-    'business',
-    'entertainment',
-    'health',
-    'science',
-    'sports',
-    'technology'
+    'General',
+    'Business',
+    'Bntertainment',
+    'Health',
+    'Science',
+    'Sports',
+    'Technology',
   ];
   //method to fetch and set data
   Future<List<Article>> getNews() async {
     var url =
-        'http://newsapi.org/v2/top-headlines?country=in&category=$currentCategory&apiKey=1440ae58ae3e4387855021f640272584';
+        'http://newsapi.org/v2/top-headlines?country=in&category=$_currentCategory&apiKey=1440ae58ae3e4387855021f640272584';
     var client = http.Client();
     try {
       var response = await client.get(url);
@@ -43,16 +52,10 @@ class ApiManager with ChangeNotifier {
       }
       notifyListeners();
     } catch (e) {
-      print('Error');
+      throw e.toString();
     }
     print('Inside fetch method : ');
     return _news;
-  }
-
-  //method to fetch by category
-  Future<List<Article>> fetchByCategory(String category) async {
-    currentCategory = category;
-    return await getNews();
   }
 
   //method to fetch by keyword

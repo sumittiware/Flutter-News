@@ -1,13 +1,10 @@
-import 'package:NewsApp/Theme/colors.dart';
-import 'package:NewsApp/Theme/config.dart';
-import 'package:NewsApp/Theme/customtheme.dart';
-import 'package:NewsApp/config.dart';
-import 'package:NewsApp/models/newsinfo.dart';
-import 'package:NewsApp/widgets/news_templete.dart';
+import 'package:animated_theme_switcher/animated_theme_switcher.dart';
+import 'package:news_app/Theme/colors.dart';
+import 'package:news_app/Theme/customtheme.dart';
+import 'package:news_app/widgets/news_templete.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
-import '../Theme/textstyle.dart';
 import '../screens/searchscreen.dart';
 import '../services/api_manager.dart';
 
@@ -17,9 +14,33 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  ApiManager newsProvider;
+  bool error = false;
+  bool loading = true;
+  fetchNews() {
+    newsProvider.getNews().then((_) {
+      setState(() {
+        loading = false;
+      });
+    }).catchError((e) {
+      setState(() {
+        error = true;
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(e.toString())));
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    Future.delayed(Duration(seconds: 1)).then((_) => fetchNews());
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    //print('Homescreen build method!!');
+    final theme = Provider.of<CustomTheme>(context);
+    newsProvider = Provider.of<ApiManager>(context);
     final deviceSize = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
@@ -36,7 +57,7 @@ class _HomePageState extends State<HomePage> {
                   Text('News App',
                       style: TextStyle(
                           fontSize: 20,
-                          color: !CustomTheme.isDarkTheme
+                          color: !theme.isDarkTheme
                               ? AppColor.bgColorDark
                               : AppColor.bgColorLight)),
                   Row(
@@ -45,7 +66,7 @@ class _HomePageState extends State<HomePage> {
                         icon: Icon(
                           Icons.search_rounded,
                           size: 30,
-                          color: !CustomTheme.isDarkTheme
+                          color: !theme.isDarkTheme
                               ? AppColor.bgColorDark
                               : AppColor.bgColorLight,
                         ),
@@ -54,17 +75,22 @@ class _HomePageState extends State<HomePage> {
                               builder: (context) => SearchScreen()));
                         },
                       ),
-                      IconButton(
-                        icon: Icon(
-                            (CustomTheme.isDarkTheme)
-                                ? Icons.brightness_5
-                                : Icons.brightness_3_outlined,
-                            size: 30,
-                            color: !CustomTheme.isDarkTheme
-                                ? AppColor.bgColorDark
-                                : AppColor.bgColorLight),
-                        onPressed: () {
-                          currentTheme.toggleTheme();
+                      ThemeSwitcher(
+                        clipper: ThemeSwitcherCircleClipper(),
+                        builder: (context) {
+                          return IconButton(
+                            icon: Icon(
+                                (theme.isDarkTheme)
+                                    ? Icons.brightness_5
+                                    : Icons.brightness_3_outlined,
+                                size: 30,
+                                color: !theme.isDarkTheme
+                                    ? AppColor.bgColorDark
+                                    : AppColor.bgColorLight),
+                            onPressed: () {
+                              theme.toggleTheme();
+                            },
+                          );
                         },
                       )
                     ],
@@ -72,106 +98,90 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            Consumer<ApiManager>(
-              builder: (context, data, child) {
-                return Container(
-                  height: deviceSize.height * 0.1,
-                  width: deviceSize.width,
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Category : ',
-                          style: TextStyle(
-                              color: !CustomTheme.isDarkTheme
-                                  ? AppColor.bgColorDark
-                                  : AppColor.bgColorLight,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                              textBaseline: TextBaseline.alphabetic),
-                        ),
-                        Expanded(
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) {
-                              return InkWell(
-                                onTap: () {
-                                  data.fetchByCategory(data.category[index]);
-                                },
-                                child: Container(
-                                  margin: EdgeInsets.all(5),
-                                  padding: EdgeInsets.all(10),
-                                  child: Align(
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        data.category[index],
-                                        style: TextStyle(
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                            fontSize: 16),
-                                      )),
-                                  decoration: BoxDecoration(
-                                      color: (data.currentCategory ==
-                                              data.category[index])
-                                          ? Theme.of(context).accentColor
-                                          : Colors.transparent,
-                                      borderRadius: BorderRadius.circular(20),
-                                      border: Border.all(
-                                          color:
-                                              Theme.of(context).primaryColor)),
-                                ),
-                              );
-                            },
-                            itemCount: data.category.length,
-                          ),
-                        )
-                      ],
+            Container(
+              height: deviceSize.height * 0.1,
+              width: deviceSize.width,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Category : ',
+                      style: TextStyle(
+                          color: !theme.isDarkTheme
+                              ? AppColor.bgColorDark
+                              : AppColor.bgColorLight,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          textBaseline: TextBaseline.alphabetic),
                     ),
-                  ),
-                );
-              },
+                    Expanded(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () {
+                              newsProvider
+                                  .setCategory(newsProvider.category[index]);
+                              setState(() {
+                                loading = true;
+                              });
+                              fetchNews();
+                            },
+                            child: Container(
+                              margin: EdgeInsets.all(5),
+                              padding: EdgeInsets.all(10),
+                              child: Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    newsProvider.category[index],
+                                    style: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                        fontSize: 16),
+                                  )),
+                              decoration: BoxDecoration(
+                                  color: (newsProvider.currentCategory ==
+                                          newsProvider.category[index])
+                                      ? Theme.of(context).accentColor
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(
+                                      color: Theme.of(context).primaryColor)),
+                            ),
+                          );
+                        },
+                        itemCount: newsProvider.category.length,
+                      ),
+                    )
+                  ],
+                ),
+              ),
             ),
             Container(
-              height: deviceSize.height * 0.8,
-              width: deviceSize.width,
-              child: FutureBuilder<List<Article>>(
-                  future:
-                      Provider.of<ApiManager>(context, listen: false).getNews(),
-                  builder: (context, snapshot) {
-                    //print('News build method!!!');
-                    if (snapshot.hasData && snapshot.data.length != 0) {
-                      return Consumer<ApiManager>(
-                          builder: (context, data, child) {
-                        return ListView.builder(
-                          itemCount: data.news.length,
-                          itemBuilder: (context, index) {
-                            var article = data.news[index];
-                            return NewsTemplete(
-                              index: index,
-                              title: article.title,
-                              imageURL: article.urlToImage,
-                              publishDate: article.publishedAt,
-                              author: article.author,
-                              url: article.url,
-                            );
-                          },
-                        );
-                      });
-                    } else {
-                      return Center(
-                        child: (snapshot.hasError)
-                            ? Text(
-                                'OOPS! Someting wrong',
-                              )
-                            : CircularProgressIndicator(),
-                      );
-                    }
-                  }),
-            )
+                height: deviceSize.height * 0.8,
+                width: deviceSize.width,
+                child: (!loading)
+                    ? ListView(
+                        children: List.generate(
+                            newsProvider.news.length,
+                            (index) => NewsTemplete(
+                                  title: newsProvider.news[index].title,
+                                  author: newsProvider.news[index].author,
+                                  imageURL: newsProvider.news[index].urlToImage,
+                                  publishDate:
+                                      newsProvider.news[index].publishedAt,
+                                  index: index,
+                                  url: newsProvider.news[index].url,
+                                )),
+                      )
+                    : ((error)
+                        ? Center(
+                            child: Text("Error occured"),
+                          )
+                        : Center(child: CircularProgressIndicator())))
           ],
         ),
       ),
