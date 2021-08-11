@@ -1,6 +1,6 @@
 # Flutter News
 
-A new Flutter project with News Api ("https://newsapi.org/").
+A new Flutter project with [News Api]("https://newsapi.org/").
 
 ## Getting Started
 
