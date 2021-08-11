@@ -89,12 +89,18 @@ class _SearchScreenState extends State<SearchScreen> {
                                 : ListView.builder(
                                     itemBuilder: (context, index) {
                                       var article = snapshot.data[index];
-                                      return NewsTemplete(
-                                        title: article.title,
-                                        imageURL: article.urlToImage,
-                                        publishDate: article.publishedAt,
-                                        author: article.author,
-                                        url: article.url,
+                                      return SizedBox(
+                                        height: 240,
+                                        width: double.infinity,
+                                        child: NewsTemplete(
+                                          index: index,
+                                          title: article.title,
+                                          imageURL: article.urlToImage,
+                                          publishDate: article.publishedAt,
+                                          author: article.author,
+                                          url: article.url,
+                                          isFromSearch: true,
+                                        ),
                                       );
                                     },
                                     itemCount: snapshot.data.length);

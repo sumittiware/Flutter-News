@@ -47,19 +47,20 @@ class _HomePageState extends State<HomePage> {
         body: Column(
           children: [
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 8),
               height: deviceSize.height * 0.06,
               width: deviceSize.width,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text('News App',
+                  Text('Flutter News',
                       style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
                           color: !theme.isDarkTheme
                               ? AppColor.bgColorDark
                               : AppColor.bgColorLight)),
+                  Spacer(),
                   Row(
                     children: [
                       IconButton(
@@ -99,23 +100,25 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             Container(
-              height: deviceSize.height * 0.1,
+              height: 100,
               width: deviceSize.width,
               child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Category : ',
-                      style: TextStyle(
-                          color: !theme.isDarkTheme
-                              ? AppColor.bgColorDark
-                              : AppColor.bgColorLight,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          textBaseline: TextBaseline.alphabetic),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 1),
+                      child: Text(
+                        'Category : ',
+                        style: TextStyle(
+                            color: !theme.isDarkTheme
+                                ? AppColor.bgColorDark
+                                : AppColor.bgColorLight,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            textBaseline: TextBaseline.alphabetic),
+                      ),
                     ),
                     Expanded(
                       child: ListView.builder(
@@ -160,28 +163,34 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            Container(
-                height: deviceSize.height * 0.8,
-                width: deviceSize.width,
-                child: (!loading)
-                    ? ListView(
-                        children: List.generate(
-                            newsProvider.news.length,
-                            (index) => NewsTemplete(
-                                  title: newsProvider.news[index].title,
-                                  author: newsProvider.news[index].author,
-                                  imageURL: newsProvider.news[index].urlToImage,
-                                  publishDate:
-                                      newsProvider.news[index].publishedAt,
-                                  index: index,
-                                  url: newsProvider.news[index].url,
-                                )),
-                      )
-                    : ((error)
-                        ? Center(
-                            child: Text("Error occured"),
-                          )
-                        : Center(child: CircularProgressIndicator())))
+            Expanded(
+              child: Container(
+                  width: deviceSize.width,
+                  child: (!loading)
+                      ? ListView(
+                          children: List.generate(
+                              newsProvider.news.length,
+                              (index) => SizedBox(
+                                    height: 240,
+                                    width: double.infinity,
+                                    child: NewsTemplete(
+                                      title: newsProvider.news[index].title,
+                                      author: newsProvider.news[index].author,
+                                      imageURL:
+                                          newsProvider.news[index].urlToImage,
+                                      publishDate:
+                                          newsProvider.news[index].publishedAt,
+                                      index: index,
+                                      url: newsProvider.news[index].url,
+                                    ),
+                                  )),
+                        )
+                      : ((error)
+                          ? Center(
+                              child: Text("Error occured"),
+                            )
+                          : Center(child: CircularProgressIndicator()))),
+            )
           ],
         ),
       ),

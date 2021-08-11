@@ -8,12 +8,19 @@ import 'package:provider/provider.dart';
 
 class NewsDetail extends StatelessWidget {
   final int index;
-  NewsDetail({this.index});
+  final bool isFromSearch;
+  NewsDetail({this.index, this.isFromSearch = false});
   @override
   Widget build(BuildContext context) {
+    print("Current index" + index.toString());
+    print("Is form : " + isFromSearch.toString());
     final deviceSize = MediaQuery.of(context).size;
-    final currentNews =
-        Provider.of<ApiManager>(context, listen: false).news[index];
+    final currentNews = (isFromSearch)
+        ? Provider.of<ApiManager>(context, listen: false).searchedNews[index]
+        : Provider.of<ApiManager>(context, listen: false).news[index];
+
+    print("Current : " + currentNews.toString());
+
     var formattedTime =
         DateFormat('dd MMM - HH:mm').format(currentNews.publishedAt);
     final theme = Provider.of<CustomTheme>(context);
@@ -36,11 +43,9 @@ class NewsDetail extends StatelessWidget {
           )
         ],
       ),
-      body: Container(
-        padding: EdgeInsets.all(20),
-        height: deviceSize.height - kToolbarHeight,
-        width: deviceSize.width,
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
               Text(

@@ -8,7 +8,7 @@ import '../models/newsinfo.dart';
 class ApiManager with ChangeNotifier {
   List<Article> _news = [];
   List<Article> _searchedNews = [];
-  String _currentCategory = 'general';
+  String _currentCategory = 'General';
 
   List<Article> get news {
     return [..._news];
@@ -30,7 +30,7 @@ class ApiManager with ChangeNotifier {
   List<String> category = [
     'General',
     'Business',
-    'Bntertainment',
+    'Entertainment',
     'Health',
     'Science',
     'Sports',
