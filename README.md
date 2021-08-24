@@ -2,6 +2,13 @@
 
 A new Flutter project with [News Api]("https://newsapi.org/")
 
+Screenshorts
+<br>
+<img src="screenshots/home-light.jpg" height = 700/>
+<img src="screenshots/home-dark.jpg" height = 700/>
+<img src="screenshots/detail.jpg" height = 700/>
+<img src="screenshots/search.jpg" height = 700/>
+<img src="screenshots/share.jpg" height = 700/>
 ## Getting Started
 
 This project is a starting point for a Flutter application.
