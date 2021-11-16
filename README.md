@@ -1,6 +1,10 @@
 # Flutter News
 
-A new Flutter project with [News Api]("https://newsapi.org/")
+An android application <h3>Flutter</h3> and <h3>[News Api]</h3>("https://newsapi.org/")
+
+## Getting Started
+
+This is aa api integration project.
 
 Screenshorts
 <br>
@@ -9,9 +13,6 @@ Screenshorts
 <img src="screenshots/detail.jpg" height = 700/>
 <img src="screenshots/search.jpg" height = 700/>
 <img src="screenshots/share.jpg" height = 700/>
-## Getting Started
-
-This project is a starting point for a Flutter application.
 
 A few resources to get you started if this is your first Flutter project:
 
