@@ -1,6 +1,6 @@
 # Flutter News
 
-An android application <h3>Flutter</h3> and <h3>[News Api]</h3>("https://newsapi.org/")
+An android application #Flutter and #[News Api](https://newsapi.org/)
 
 ## Getting Started
 
