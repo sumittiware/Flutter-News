@@ -4,7 +4,7 @@ An android application Flutter and [News Api](https://newsapi.org/)
 
 ## Getting Started
 
-This is aa api integration project.
+This is an api integration project.
 
 Screenshorts
 <br>
