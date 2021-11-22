@@ -1,6 +1,6 @@
 # Flutter News
 
-An android application Flutter and [News Api](https://newsapi.org/)
+An android application with Flutter and [News Api](https://newsapi.org/)
 
 ## Getting Started
 
